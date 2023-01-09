@@ -84,12 +84,12 @@ class Command(BaseCommand):
                     Command.get_image_from_url(random_image["download_url"])
                 )
                 success = True
-            except cloudinary.exceptions.Error:
+            except cloudinary.exceptions.Error as e:
                 random_image = random.choice(self.images_list)
                 attempts += 1
 
         if not success:
-            raise CommandError(f"Unable to save image to cloudinary")
+            raise CommandError(f"Unable to save the image to Cloudinary")
 
     def create_post_images(self, post: post_models.Post, k: int) -> None:
         """

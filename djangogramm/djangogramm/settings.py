@@ -35,7 +35,7 @@ DEBUG = False
 if not IS_DOCKER:
     DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'djangogramm.cv-pf.pp.ua']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'djangogramm.cv-pf.pp.ua']
 
 
 # Application definition
@@ -166,6 +166,7 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 INTERNAL_IPS = [
     '127.0.0.1',
+    'localhost',
 ]
 
 CLOUDINARY_STORAGE = {
