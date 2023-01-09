@@ -1,0 +1,72 @@
+services:
+  web:
+    build: .
+    image: leechlab/djangogramm:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f http://localhost:80 || exit 1
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    working_dir: /Djangogramm
+    env_file:
+      - .env
+    environment:
+      - PG_DATABASE_ADDRESS=db
+      - IS_DOCKER=true
+    volumes:
+      - "djangogramm_staticfiles:/Djangogramm/djangogramm/static
+    ports:
+      - "80:80"
+    networks:
+      - djangogramm_front-tier
+      - djangogramm_back-tier
+    restart: always
+
+  db:
+    build: postgres
+    image:  leechlab/djangogramm:latest
+    env_file:
+      - .env
+    volumes:
+      - "djangogramm_db-data:/var/lib/postgresql/data"
+    healthcheck:
+      test: bash /healthchecks/postgres.sh
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - djangogramm_back-tier
+    restart: always
+
+  # this service runs once to fill the database with random data
+  # it won't run unless you specify the "fill" profile
+  # docker compose --profile fill up -d
+  fill:
+    image: leechlab/djangogramm:latest
+    profiles: ["fill"]
+    working_dir: /Djangogramm
+    env_file:
+      - .env
+    environment:
+      - PG_DATABASE_ADDRESS=db
+      - IS_DOCKER=true
+    command: python /Djangogramm/djangogramm/manage.py initadmin
+    depends_on:
+      web:
+        condition: service_healthy
+    networks:
+      - djangogramm_back-tier
+    restart: no
+
+volumes:
+  djangogramm_staticfiles:
+  djangogramm_db-data:
+
+networks:
+  djangogramm_front-tier:
+  djangogramm_back-tier:
