@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Edit post{% endblock %}
+
+{% block content %}
+    <h3>Edit post</h3>
+    <form id="post_form" method="post" enctype="multipart/form-data"> {% csrf_token %}
+        {{ form.as_p }}
+
+        <h5>Images:</h5>
+        {{ image_formset.non_form_errors }}
+        {{ image_formset.management_form }}
+        {% for image_form in image_formset %}
+            {% if image_form.instance.image %}
+                <a href="{{ image_form.instance.image.url }}">
+                    <img  id="preview" src="{{ image_form.instance.image.url }}" alt="" width="100" class="mr-2">
+                </a>
+                {{ image_form.id}}
+                {{ image_form.post}}
+                {{ image_form.DELETE.label_tag}}
+                {{ image_form.DELETE}}
+                <hr>
+            {% else %}
+                <div id="hidden_image_form">
+                    {{ image_form.as_p }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <button id="add-image-form" class="btn btn-primary my-3" type="button">Add image</button>
+
+        <br>
+        <input class="btn btn-primary" type="submit" value="Save" />
+
+        {% block cansel_button %}
+            <a href="{{ view.get_success_url }}" class="btn btn-primary">Cansel</a>
+        {% endblock %}
+
+    </form>
+{% endblock %}

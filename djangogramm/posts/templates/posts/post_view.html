@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <strong>{{ post.title }}</strong>
+    <div>
+        <hr />
+        <p>{{ post.text|linebreaks }}</p>
+        <hr />
+    </div>
+    {% for image in post.images.all %}
+        <div class="container">
+            <div class="media">
+                <a href="{{ image.image.url }}">
+                    <img src="{{ image.image.url }}" class="img-fluid" alt="image">
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div>
+        <hr />
+        Tags: {{ post.tags.all|join:", " }}
+        <hr />
+    </div>
+    <div class="d-flex">
+        <div class="p-2 flex-grow-1">
+            posted by <a href="{{ post.added_by.get_absolute_url }}">{{ post.added_by }}</a> at {{ post.posted|date:"F j, Y, H:i:s" }}
+        </div>
+        <div class="p-2 ">
+            {% url "posts:like_dislike" post.pk as like_dislike_url %}
+            {% include 'posts/inc/_likes_dislikes.html' with url=like_dislike_url likes=post.likes dislikes=post.dislikes %}
+        </div>
+    </div>
+
+    <hr />
+    <div class="mt-2 mb-2 mx-2">
+        <a href="{% url 'posts:posts_list' %}" class="btn btn-primary">Back to the posts list</a>
+        {% include "posts/inc/_edit_delete_buttons.html" with post=post  %}
+    </div>
+
+{% endblock %}

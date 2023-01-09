@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load cloudinary %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+    {% block page_title %}{% endblock %}
+
+    {% include "posts/inc/_pagination.html" %}
+    {% for item in page_obj %}
+        <div class="card text-left mb-2">
+            <div class="card-header">
+                <div class="d-flex">
+                    <div class="p-2 flex-grow-1">{{ item.title }}</div>
+                    <div class="ms-auto p-2">
+                        <a href="{{ item.added_by.get_absolute_url }}">{{ item.added_by }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ item.text|linebreaks|truncatewords:100}}</p>
+                <div class="media">
+                    {% for image in item.images.all %}
+                        <a href="{{ image.image.url }}">
+                            {% cloudinary image.image.name width=100 class="mr-2"%}
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="mt-2 mb-2">
+                    <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Veiw</a>
+                    {% include "posts/inc/_edit_delete_buttons.html" with post=item %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <div>
+                    Tags: {{ item.tags.all|join:", " }}
+                </div>
+            </div>
+            <div class="card-footer">
+               <div class="d-flex">
+                    <div class="p-2 flex-grow-1 text-muted">{{ item.posted }}</div>
+                    <div class="p-2 ">
+                        {% url "posts:like_dislike" item.pk as like_dislike_url %}
+                        {% include "posts/inc/_likes_dislikes.html" with url=ilike_dislike_url likes=item.query_likes dislikes=item.query_dislikes %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No posts available.</p>
+    {% endfor %}
+
+    {% include "posts/inc/_pagination.html" %}
+
+{% endblock %}

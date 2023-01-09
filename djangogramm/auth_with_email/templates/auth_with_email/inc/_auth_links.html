@@ -1,0 +1,22 @@
+<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+    {% if user.is_anonymous %}
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'auth_with_email:signup' %}">Sign up</a>
+        </li>
+
+        <span class="navbar-text"> | </span>
+
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'auth_with_email:login' %}">Login</a>
+        </li>
+    {% else %}
+        {% block user_menu %}
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'auth_with_email:profile_edit' %}">{{ user }}</a>
+            </li>
+        {% endblock %}
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'auth_with_email:logout' %}">Logout</a>
+        </li>
+    {% endif %}
+</ul>

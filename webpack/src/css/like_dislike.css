@@ -1,0 +1,19 @@
+.like {
+    cursor: pointer;
+    color: blue;
+    text-decoration:underline;
+}
+
+.dislike {
+    cursor: pointer;
+    color: blue;
+    text-decoration:underline;
+}
+
+.likes-qty {
+    color: green;
+}
+
+.dislikes-qty {
+    color: red;
+}

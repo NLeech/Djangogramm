@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+    <h5>Login:</h5>
+    <hr />
+    {{ form.as_p }}
+    <input class="btn btn-primary" type="submit" value="Login" />
+
+    {% include "auth_with_email/inc/_social_accounts_login.html" with action="login" %}
+
+</form>
+{% endblock %}

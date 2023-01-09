@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Delete post{% endblock %}
+{% block content %}
+    <h3>Delete post</h3>
+    <div>
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            <p>Are you sure you want to delete post "{{ object.title }}"?</p>
+
+            <button class="btn btn-primary mt-2 mb-3 ml-3" type="submit">Delete</button>
+            <a href="{% url 'posts:post_view' object.pk %}" class="btn btn-primary mt-2 mb-3 ml-3">Cansel</a>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Email confirmation{% endblock %}
+{% block content %}
+    <div>
+        <hr>
+        <strong>Please check your email ({{ user.email }}) to confirm your account.</strong>
+        <hr>
+    </div>
+    <div>
+        <form method="post" id="post_form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="btn btn-primary" type="submit" value="Resend activation code" />
+        </form>
+    </div>
+{% endblock %}
