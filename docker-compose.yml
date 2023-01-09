@@ -18,12 +18,12 @@ services:
       - PG_DATABASE_ADDRESS=db
       - IS_DOCKER=true
     volumes:
-      - "djangogramm_staticfiles:/Djangogramm/djangogramm/static"
+      - "staticfiles:/Djangogramm/djangogramm/static"
     ports:
       - "80:80"
     networks:
-      - djangogramm_front-tier
-      - djangogramm_back-tier
+      - front-tier
+      - back-tier
     restart: "always"
 
   db:
@@ -32,7 +32,7 @@ services:
     env_file:
       - .env
     volumes:
-      - "djangogramm_db-data:/var/lib/postgresql/data"
+      - "db-data:/var/lib/postgresql/data"
     healthcheck:
       test: bash /healthchecks/postgres.sh
       interval: 30s
@@ -40,7 +40,7 @@ services:
       retries: 3
       start_period: 15s
     networks:
-      - djangogramm_back-tier
+      - back-tier
     restart: "always"
 
   # this service runs once to fill the database with random data
@@ -60,13 +60,13 @@ services:
       web:
         condition: service_healthy
     networks:
-      - djangogramm_back-tier
+      - back-tier
     restart: "no"
 
 volumes:
-  djangogramm_staticfiles:
-  djangogramm_db-data:
+  staticfiles:
+  db-data:
 
 networks:
-  djangogramm_front-tier:
-  djangogramm_back-tier:
+  front-tier:
+  back-tier:
