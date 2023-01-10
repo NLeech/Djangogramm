@@ -24,6 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 IS_DOCKER = "IS_DOCKER" in os.environ
 
+if not IS_DOCKER:
+    import environ
+    env = environ.Env()
+    env.read_env(env.str('ENV_PATH', str(BASE_DIR.parent) + '/.env'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
