@@ -84,12 +84,12 @@ class Command(BaseCommand):
                     Command.get_image_from_url(random_image["download_url"])
                 )
                 success = True
-            except cloudinary.exceptions.Error:
+            except cloudinary.exceptions.Error as e:
                 random_image = random.choice(self.images_list)
                 attempts += 1
 
         if not success:
-            raise CommandError(f"Unable to save image to cloudinary")
+            raise CommandError(f"Unable to save the image to Cloudinary")
 
     def create_post_images(self, post: post_models.Post, k: int) -> None:
         """
@@ -181,11 +181,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """ Fill database with users, tags, likes/dislikes, posts and images """
-        print("The procedure takes several minutes, please wait!")
 
-        # delete all users, except staff
-        # also all posts, images, tags and likes will be deleted
-        user_model.objects.filter(is_staff=False).delete()
+        if post_models.Post.objects.count() > 0:
+            # don't run on a non-empty database
+            return
+
+        print("The procedure takes several minutes, please wait!")
 
         for user_num in range(USERS_QTY):
             new_user = self.create_user(user_num + 1)
