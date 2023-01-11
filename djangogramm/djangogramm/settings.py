@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os.path
 from pathlib import Path
+
 import dj_database_url
 import cloudinary
 import cloudinary.uploader
@@ -40,11 +41,13 @@ DEBUG = False
 if not IS_DOCKER:
     DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'djangogramm.cv-pf.pp.ua']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+PUBLIC_URLS = os.environ.get('APPLICATION_URLS')
+if PUBLIC_URLS:
+    ALLOWED_HOSTS.extend(PUBLIC_URLS.split(','))
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,6 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'posts.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
