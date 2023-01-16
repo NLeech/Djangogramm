@@ -79,7 +79,7 @@ docker context use djangogramm
 Optionally, you can fill the database with random data for the first container run. 
 For this run your container with the command:
 ```
-docker compose --profile fill up
+FILL_DATABASE="fill" docker compose up
 ```
 
 Run application:
