@@ -21,7 +21,7 @@ services:
     volumes:
       - "staticfiles:/Djangogramm/djangogramm/static"
     ports:
-      - "80:80"
+      - "8082:80"
     networks:
       - front-tier
       - back-tier
