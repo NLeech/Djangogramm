@@ -10,4 +10,4 @@ if [ "${FILL_DATABASE}" == "fill" ]; then
   python manage.py fill_database
 fi
 
-python manage.py runserver 0.0.0.0:80
+gunicorn --bind 0.0.0.0:80 -w 1 djangogramm.wsgi
